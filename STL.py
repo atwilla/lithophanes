@@ -15,14 +15,14 @@ class Facet:
 		else:
 			file = open(outputFile, "a")
 
-		print("facet normal %e %e %e" % (self.normal[0], self.normal[1], self.normal[2]), file=file)
-		print("\touter loop", file=file)
+		print("\tfacet normal %e %e %e" % (self.normal[0], self.normal[1], self.normal[2]), file=file)
+		print("\t\touter loop", file=file)
 
 		for vertex in self.verteces:
-			print("\t\tvertex %e %e %e" % (vertex[0], vertex[1], vertex[2]))
+			print("\t\t\tvertex %e %e %e" % (vertex[0], vertex[1], vertex[2]), file=file)
 
-		print("\tendloop", file=file)
-		print("end facet", file=file)
+		print("\t\tendloop", file=file)
+		print("\tend facet", file=file)
 
 		file.close()
 
@@ -41,9 +41,22 @@ class Shape:
 	def addFacet(self, facet):
 		self.facets_.append(facet)
 
-	def export(self, outputFile=""):
+	def print(self, outputFile):
 		"""Print the contents of the shape to the given file in STL ASCII format."""
-		pass
+	
+		with open(outputFile, 'w') as file:
+			print("solid " +  self.name, file=file)
+			print("name written")
+
+		for facet in self.facets_:
+			facet.print(outputFile)
+
+		with open(outputFile, 'a') as file:
+			print("endsolid " + self.name, file=file)
+			print("end written")
+
 
 facet = Facet(verteces=[[0, 0, 0], [0, 1, 0], [0, 0, 1]], normal=[0, 0, 1])
-facet.print()
+shape = Shape("testSolid")
+shape.addFacet(facet)
+shape.print("test-output.stl")
