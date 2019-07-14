@@ -1,4 +1,5 @@
 from decimal import Decimal
+from PIL import Image
 import sys
 
 
@@ -55,6 +56,13 @@ class Shape:
 			print("endsolid " + self.name, file=file)
 			print("end written")
 
+
+class Lithopane(Shape):
+
+	def __init__(self, image, desiredWidth):
+		self.image = Image.open(image)
+		self.width = desiredWidth
+		
 
 facet = Facet(verteces=[[0, 0, 0], [0, 1, 0], [0, 0, 1]], normal=[0, 0, 1])
 shape = Shape("testSolid")
