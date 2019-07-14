@@ -1,7 +1,8 @@
+from decimal import Decimal
 import sys
 
 
-class STLFacet:
+class Facet:
 
 	def __init__(self, verteces=[], normal=[]):
 		self.verteces = verteces
@@ -14,19 +15,24 @@ class STLFacet:
 		else:
 			file = open(outputFile, "a")
 
-		print("facet normal %f %f %f" % (self.normal[0], self.normal[1], self.normal[2]), file=file)
+		print("facet normal %e %e %e" % (self.normal[0], self.normal[1], self.normal[2]), file=file)
 		print("\touter loop", file=file)
 
 		for vertex in self.verteces:
-			print("\t\tvertex %f %f %f" % (vertex[0], vertex[1], vertex[2]))
+			print("\t\tvertex %e %e %e" % (vertex[0], vertex[1], vertex[2]))
 
 		print("\tendloop", file=file)
 		print("end facet", file=file)
 
 		file.close()
 
+	def toString(self):
+		"""Construct a string that represents the STL facet."""
 
-class STLShape:
+		facetStr = "facet normal"
+
+
+class Shape:
 
 	def __init__(self, name):
 		self.name = name
@@ -39,5 +45,5 @@ class STLShape:
 		"""Print the contents of the shape to the given file in STL ASCII format."""
 		pass
 
-facet = STLFacet(verteces=[[0, 0, 0], [0, 1, 0], [0, 0, 1]], normal=[0, 0, 1])
+facet = Facet(verteces=[[0, 0, 0], [0, 1, 0], [0, 0, 1]], normal=[0, 0, 1])
 facet.print()
