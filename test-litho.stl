@@ -1,16 +1,2 @@
 solid test-litho
-	facet normal 0.000000e+00 0.000000e+00 -1.000000e+00
-		outer loop
-			vertex 0.000000e+00 4.000000e+01 2.000000e+00
-			vertex 4.000000e+01 4.000000e+01 0.000000e+00
-			vertex 0.000000e+00 0.000000e+00 0.000000e+00
-		endloop
-	end facet
-	facet normal 0.000000e+00 0.000000e+00 -1.000000e+00
-		outer loop
-			vertex 4.000000e+01 4.000000e+01 0.000000e+00
-			vertex 4.000000e+01 0.000000e+00 0.000000e+00
-			vertex 0.000000e+00 0.000000e+00 0.000000e+00
-		endloop
-	end facet
 endsolid test-litho

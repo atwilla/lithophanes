@@ -22,7 +22,8 @@ class Facet:
 	def toStr(self):
 		"""Construct a string that represents the STL facet."""
 
-		facetStr = "\tfacet normal " + "%e %e %e\n\t\touter loop\n" % (self.normal[0], self.normal[1], self.normal[2])
+		facetStr = "\tfacet normal " + "%e %e %e\n\t\touter loop\n" % (self.normal[0], 
+			self.normal[1], self.normal[2])
 		
 		for vertex in self.verteces:
 			facetStr += "\t\t\tvertex %e %e %e\n" % (vertex[0], vertex[1], vertex[2])
@@ -75,18 +76,60 @@ class Lithopane(Shape):
 		for row in range(self.rows):
 
 			for col in range(self.cols):
-				currLeftCorner = [(col / self.cols) * self.width, self.height - (self.pixelWidth * row), maxHeight]
-				self.addBlock(currLeftCorner, 0)
+				topLeftBase = [(col / self.cols) * self.width, self.height - (self.pixelWidth * row), 0]
+				self.addBlock(topLeftBase, 255)
 
-	def addBlock(self, topLeft, height):
-		# Create block base
-		topRight = [topLeft[0] + self.pixelWidth, topLeft[1], 0]
-		bottomRight = [topRight[0], topRight[1] - self.pixelWidth, 0]
-		bottomLeft = [topLeft[0], topLeft[1] - self.pixelWidth, 0]
-		baseNormal = [0, 0, -1]
+	
+	def addSurface(self, points, normal):
+		"""
+		Add a face to the lithopane based on four points.
+		"""
+		self.addFacet(Facet(points[0:-1], normal))
+		self.addFacet(Facet(points[1:], normal))
 
-		self.addFacet(Facet([topLeft, topRight, bottomLeft], baseNormal))
-		self.addFacet(Facet([topRight, bottomRight, bottomLeft], baseNormal))
+	
+	def addBlock(self, topLeftBase, height):
+
+		print(topLeftBase)
+
+		# Determine block points.
+		points = [topLeftBase]
+		# topRightBase point
+		points.append([topLeftBase[0] + self.pixelWidth, topLeftBase[1], 0])
+
+		# bottom left and right base points
+		for i in range(2):
+			newPoint = [points[-2][0], points[-2][1] - self.pixelWidth, points[-2][2]]
+			points.append(newPoint)
+			print(points)
+
+		# Add points for top of block
+		for i in range(4):
+			newPoint = [points[i][0], points[i][1], points[i][2] + height]
+			points.append(newPoint)
+
+		for point in points:
+			print(point)
+
+		## bottomLeftBase point
+		#points.append(topLeftBase)
+		#points[-1][1] -= self.pixelWidth
+		## bottomRightBase point
+
+		#botLeftBase = topLeftBase
+		#botLeftBase[1] -= self.pixelWidth
+		#botRightBase = topRightBase
+		#botRightBase[1] -= self.pixelWidth
+
+		#topLeftTop = topLeftBase
+		#topLeftTop[2] += height
+		#topRightTop = topRightBase
+		#topRightTop[2] += height
+		#botLeftTop = botLeftBase
+		#botLeftTop[2] += height
+		#botRightTop = botRightBase
+		#botRightTop[2] += height
+
 
 	def getData(self):
 		print("Lithopane Dimensions: ")
@@ -99,5 +142,5 @@ class Lithopane(Shape):
 # shape.addFacet(facet)
 # shape.print("test-output.stl")
 litho = Lithopane("test-litho", "test-picture-2.png")
-print(litho.getData())
+#print(litho.getData())
 litho.print("test-litho.stl")
