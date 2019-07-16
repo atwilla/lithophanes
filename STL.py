@@ -60,7 +60,7 @@ class Lithopane(Shape):
 
 	def __init__(self, name, image, desiredWidth=40, maxHeight=2):
 		"""
-		Create Lithopane object. All units are millimeters unless specified 
+		Create Lithopane object. All units are millimeters unless specified
 		otherwise.
 		"""
 
@@ -71,13 +71,17 @@ class Lithopane(Shape):
 		self.rows = self.image.size[1]
 		self.width = desiredWidth
 		self.pixelWidth = self.width / self.cols
-		self.height = self.pixelWidth * self.rows
+		self.length = self.pixelWidth * self.rows
+		self.maxHeight = maxHeight
 
 		for row in range(self.rows):
 
 			for col in range(self.cols):
-				topLeftBase = [(col / self.cols) * self.width, self.height - (self.pixelWidth * row), 0]
-				self.addBlock(topLeftBase, 255)
+				topLeftBase = [(col / self.cols) * self.width, self.length 
+					- (self.pixelWidth * row), 0]
+				height = self.pixels[(row * col) + col] * (self.maxHeight
+					/ 255) + self.maxHeight
+				self.addBlock(topLeftBase, height)
 
 	
 	def addSurface(self, points, normal):
@@ -101,15 +105,25 @@ class Lithopane(Shape):
 		for i in range(2):
 			newPoint = [points[-2][0], points[-2][1] - self.pixelWidth, points[-2][2]]
 			points.append(newPoint)
-			print(points)
+			# print(points)
 
 		# Add points for top of block
 		for i in range(4):
 			newPoint = [points[i][0], points[i][1], points[i][2] + height]
 			points.append(newPoint)
 
-		for point in points:
-			print(point)
+		# for point in points:
+			# print(point)
+
+		# Create bottom and top surfaces.
+		self.addSurface(points[:4], [0, 0, 1])
+		self.addSurface(points[4:], [0, 0, -1])
+		# Create remaining sides.
+		self.addSurface(points[:2] + points[4:6], [0, 1, 0])
+		self.addSurface(points[1:3] + points[5:7], [1, 0, 0])
+		self.addSurface(points[2:4] + points[6:], [0, -1, 0])
+		self.addSurface([points[3], points[0], points[7], points[4]],
+			[-1, 0, 0])
 
 		## bottomLeftBase point
 		#points.append(topLeftBase)
@@ -130,6 +144,13 @@ class Lithopane(Shape):
 		#botRightTop = botRightBase
 		#botRightTop[2] += height
 
+	
+	def buildLithopane(self, resolution):
+		"""
+		Create an STL lithopane of the given picture based on given
+		paramters.
+		"""
+	
 
 	def getData(self):
 		print("Lithopane Dimensions: ")
