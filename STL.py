@@ -81,7 +81,8 @@ class Lithopane(Shape):
 					- (self.pixelWidth * row), 0]
 				height = self.pixels[(row * col) + col] * (self.maxHeight
 					/ 255) + self.maxHeight
-				self.addBlock(topLeftBase, height)
+				self.addBlock(topLeftBase, self.pixels[(row * self.cols) 
+					+ col])
 
 	
 	def addSurface(self, points, normal):
@@ -94,7 +95,7 @@ class Lithopane(Shape):
 	
 	def addBlock(self, topLeftBase, height):
 
-		print(topLeftBase)
+		# print(topLeftBase)
 
 		# Determine block points.
 		points = [topLeftBase]
@@ -156,12 +157,3 @@ class Lithopane(Shape):
 		print("Lithopane Dimensions: ")
 		return (self.width, self.height)
 		
-
-# facet = Facet(verteces=[[0, 0, 0], [0, 1, 0], [0, 0, 1]], normal=[0, 0, 1])
-# print(facet.toStr())
-# shape = Shape("testSolid")
-# shape.addFacet(facet)
-# shape.print("test-output.stl")
-litho = Lithopane("test-litho", "test-picture-1.png")
-#print(litho.getData())
-litho.print("test-litho.stl")
