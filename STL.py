@@ -28,7 +28,7 @@ class Facet:
 		for vertex in self.verteces:
 			facetStr += "\t\t\tvertex %e %e %e\n" % (vertex[0], vertex[1], vertex[2])
 
-		facetStr += "\t\tendloop\n\tend facet\n"
+		facetStr += "\t\tendloop\n\tendfacet\n"
 
 		return facetStr
 
@@ -162,6 +162,6 @@ class Lithopane(Shape):
 # shape = Shape("testSolid")
 # shape.addFacet(facet)
 # shape.print("test-output.stl")
-litho = Lithopane("test-litho", "test-picture-2.png")
+litho = Lithopane("test-litho", "test-picture-1.png")
 #print(litho.getData())
 litho.print("test-litho.stl")
