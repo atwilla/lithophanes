@@ -79,10 +79,9 @@ class Lithopane(Shape):
 			for col in range(self.cols):
 				topLeftBase = [(col / self.cols) * self.width, self.length 
 					- (self.pixelWidth * row), 0]
-				height = self.pixels[(row * col) + col] * (self.maxHeight
+				height = self.pixels[(row * col) + col] * (-self.maxHeight
 					/ 255) + self.maxHeight
-				self.addBlock(topLeftBase, self.pixels[(row * self.cols) 
-					+ col])
+				self.addBlock(topLeftBase, height)
 
 	
 	def addSurface(self, points, normal):
@@ -119,11 +118,16 @@ class Lithopane(Shape):
 		# Create bottom and top surfaces.
 		self.addSurface(points[:4], [0, 0, 1])
 		self.addSurface(points[4:], [0, 0, -1])
-		# Create remaining sides.
+
+		# Create +y surface.
 		self.addSurface(points[:2] + points[4:6], [0, 1, 0])
-		self.addSurface(points[1:3] + points[5:7], [1, 0, 0])
+		# Create +x surface.
+		self.addSurface([points[1], points[3], points[5], points[7]], 
+			[1, 0, 0])
+		# Create -y surface.
 		self.addSurface(points[2:4] + points[6:], [0, -1, 0])
-		self.addSurface([points[3], points[0], points[7], points[4]],
+		# Create -x surface.
+		self.addSurface([points[0], points[4], points[2], points[6]],
 			[-1, 0, 0])
 
 		## bottomLeftBase point
