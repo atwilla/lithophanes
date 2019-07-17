@@ -79,8 +79,8 @@ class Lithopane(Shape):
 			for col in range(self.cols):
 				topLeftBase = [(col / self.cols) * self.width, self.length 
 					- (self.pixelWidth * row), 0]
-				height = self.pixels[(row * col) + col] * (-self.maxHeight
-					/ 255) + self.maxHeight
+				height = self.pixels[(row * self.cols) + col] * (-self.maxHeight
+					/ 255) + self.maxHeight + 1
 				self.addBlock(topLeftBase, height)
 
 	
