@@ -5,7 +5,7 @@ import sys
 
 class Facet:
 
-	def __init__(self, verteces=[], normal=[]):
+	def __init__(self, verteces=[], normal=[0, 0, 0]):
 		self.verteces = verteces
 		self.normal = normal
 
@@ -58,7 +58,7 @@ class Shape:
 
 class Lithopane(Shape):
 
-	def __init__(self, name, image, desiredWidth=40, maxHeight=2):
+	def __init__(self, name, image, desiredWidth=100, maxHeight=2, maxPixels=100000):
 		"""
 		Create Lithopane object. All units are millimeters unless specified
 		otherwise.
@@ -69,6 +69,16 @@ class Lithopane(Shape):
 		self.pixels = list(self.image.getdata())
 		self.cols = self.image.size[0]
 		self.rows = self.image.size[1]
+
+		if len(self.pixels) > maxPixels:
+			scale = (maxPixels / len(self.pixels)) ** 0.5
+			self.image = self.image.resize((int(self.cols * scale), 
+				int(self.rows * scale)))
+			self.pixels = list(self.image.getdata())
+			self.cols = self.image.size[0]
+			self.rows = self.image.size[1]
+			self.image.show()
+
 		self.width = desiredWidth
 		self.pixelWidth = self.width / self.cols
 		self.length = self.pixelWidth * self.rows
@@ -84,12 +94,14 @@ class Lithopane(Shape):
 				self.addBlock(topLeftBase, height)
 
 	
-	def addSurface(self, points, normal):
+	def addSurface(self, points, normal=[0, 0, 0]):
 		"""
-		Add a face to the lithopane based on four points.
+		Add a face to the lithopane based on four points. Points must be given
+		in counter-clockwise order w/ respect to the normal vector.
 		"""
-		self.addFacet(Facet(points[0:-1], normal))
-		self.addFacet(Facet(points[1:], normal))
+
+		self.addFacet(Facet([points[0], points[2], points[3]], normal))
+		self.addFacet(Facet([points[1], points[2], points[3]], normal))
 
 	
 	def addBlock(self, topLeftBase, height):
@@ -115,42 +127,31 @@ class Lithopane(Shape):
 		# for point in points:
 			# print(point)
 
+		blankNormal = [0, 0, 0]
+
 		# Create bottom and top surfaces.
-		self.addSurface(points[:4], [0, 0, 1])
-		self.addSurface(points[4:], [0, 0, -1])
+		self.addFacet(Facet([points[1], points[2], points[0]]))
+		self.addFacet(Facet([points[1], points[3], points[2]]))
+
+		self.addFacet(Facet([points[4], points[6], points[5]]))
+		self.addFacet(Facet([points[5], points[6], points[7]]))
 
 		# Create +y surface.
-		self.addSurface(points[:2] + points[4:6], [0, 1, 0])
+		self.addFacet(Facet([points[1], points[4], points[0]]))
+		self.addFacet(Facet([points[1], points[5], points[4]]))
 		# Create +x surface.
-		self.addSurface([points[1], points[3], points[5], points[7]], 
-			[1, 0, 0])
+		# self.addSurface([points[1], points[3], points[5], points[7]], 
+		# 	blankNormal)
+		self.addFacet(Facet([points[3], points[5], points[1]]))
+		self.addFacet(Facet([points[3], points[7], points[5]]))
 		# Create -y surface.
-		self.addSurface(points[2:4] + points[6:], [0, -1, 0])
+		self.addFacet(Facet([points[2], points[6], points[3]]))
+		self.addFacet(Facet([points[6], points[7], points[3]]))
 		# Create -x surface.
-		self.addSurface([points[0], points[4], points[2], points[6]],
-			[-1, 0, 0])
-
-		## bottomLeftBase point
-		#points.append(topLeftBase)
-		#points[-1][1] -= self.pixelWidth
-		## bottomRightBase point
-
-		#botLeftBase = topLeftBase
-		#botLeftBase[1] -= self.pixelWidth
-		#botRightBase = topRightBase
-		#botRightBase[1] -= self.pixelWidth
-
-		#topLeftTop = topLeftBase
-		#topLeftTop[2] += height
-		#topRightTop = topRightBase
-		#topRightTop[2] += height
-		#botLeftTop = botLeftBase
-		#botLeftTop[2] += height
-		#botRightTop = botRightBase
-		#botRightTop[2] += height
-
+		self.addFacet(Facet([points[0], points[4], points[2]]))
+		self.addFacet(Facet([points[4], points[6], points[2]]))
 	
-	def buildLithopane(self, resolution):
+	def buildLithopane(self):
 		"""
 		Create an STL lithopane of the given picture based on given
 		paramters.
