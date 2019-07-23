@@ -58,7 +58,7 @@ class Shape:
 
 class Lithopane(Shape):
 
-	def __init__(self, name, image, desiredWidth=100, maxHeight=2, maxPixels=100000):
+	def __init__(self, name, image, width=100, maxHeight=2, maxPixels=50000):
 		"""
 		Create Lithopane object. All units are millimeters unless specified
 		otherwise.
@@ -69,29 +69,29 @@ class Lithopane(Shape):
 		self.pixels = list(self.image.getdata())
 		self.cols = self.image.size[0]
 		self.rows = self.image.size[1]
+		self.buildLithopane(width, maxHeight, maxPixels)
+		# self.maxHeight = maxHeight
 
-		if len(self.pixels) > maxPixels:
-			scale = (maxPixels / len(self.pixels)) ** 0.5
-			self.image = self.image.resize((int(self.cols * scale), 
-				int(self.rows * scale)))
-			self.pixels = list(self.image.getdata())
-			self.cols = self.image.size[0]
-			self.rows = self.image.size[1]
-			self.image.show()
+		# if len(self.pixels) > maxPixels:
+		# 	scale = (maxPixels / len(self.pixels)) ** 0.5
+		# 	self.image = self.image.resize((int(self.cols * scale), 
+		# 		int(self.rows * scale)))
+		# 	self.pixels = list(self.image.getdata())
+		# 	self.cols = self.image.size[0]
+		# 	self.rows = self.image.size[1]
 
-		self.width = desiredWidth
-		self.pixelWidth = self.width / self.cols
-		self.length = self.pixelWidth * self.rows
-		self.maxHeight = maxHeight
+		# self.width = width
+		# self.pixelWidth = self.width / self.cols
+		# self.length = self.pixelWidth * self.rows
 
-		for row in range(self.rows):
+		# for row in range(self.rows):
 
-			for col in range(self.cols):
-				topLeftBase = [(col / self.cols) * self.width, self.length 
-					- (self.pixelWidth * row), 0]
-				height = self.pixels[(row * self.cols) + col] * (-self.maxHeight
-					/ 255) + self.maxHeight + 1
-				self.addBlock(topLeftBase, height)
+		# 	for col in range(self.cols):
+		# 		topLeftBase = [(col / self.cols) * self.width, self.length 
+		# 			- (self.pixelWidth * row), 0]
+		# 		height = self.pixels[(row * self.cols) + col] * (-self.maxHeight
+		# 			/ 255) + self.maxHeight + 0.5
+		# 		self.addBlock(topLeftBase, height)
 
 	
 	def addSurface(self, points, normal=[0, 0, 0]):
@@ -140,8 +140,6 @@ class Lithopane(Shape):
 		self.addFacet(Facet([points[1], points[4], points[0]]))
 		self.addFacet(Facet([points[1], points[5], points[4]]))
 		# Create +x surface.
-		# self.addSurface([points[1], points[3], points[5], points[7]], 
-		# 	blankNormal)
 		self.addFacet(Facet([points[3], points[5], points[1]]))
 		self.addFacet(Facet([points[3], points[7], points[5]]))
 		# Create -y surface.
@@ -151,12 +149,38 @@ class Lithopane(Shape):
 		self.addFacet(Facet([points[0], points[4], points[2]]))
 		self.addFacet(Facet([points[4], points[6], points[2]]))
 	
-	def buildLithopane(self):
+	def buildLithopane(self, width, maxHeight, maxPixels=50000):
 		"""
 		Create an STL lithopane of the given picture based on given
-		paramters.
+		paramters. Allow for post-initialization modification.
 		"""
 	
+		self.facets_.clear()
+		self.maxHeight = maxHeight
+
+		# Scale down image to match or be under maxPixels.
+		if len(self.pixels) > maxPixels:
+			scale = (maxPixels / len(self.pixels)) ** 0.5
+			self.image = self.image.resize((int(self.cols * scale), 
+				int(self.rows * scale)))
+			self.pixels = list(self.image.getdata())
+			self.cols = self.image.size[0]
+			self.rows = self.image.size[1]
+
+		self.width = width
+		self.pixelWidth = self.width / self.cols
+		self.length = self.pixelWidth * self.rows
+
+		for row in range(self.rows):
+
+			for col in range(self.cols):
+				topLeftBase = [(col / self.cols) * self.width, self.length 
+					- (self.pixelWidth * row), 0]
+
+				height = self.pixels[(row * self.cols) + col] * (-self.maxHeight
+					/ 255) + self.maxHeight + 0.5
+
+				self.addBlock(topLeftBase, height)
 
 	def getData(self):
 		print("Lithopane Dimensions: ")
