@@ -17,7 +17,7 @@ else:
 
 
 	litho = STL.Lithopane(str(options['-o']), args[1], 
-		desiredWidth=int(options['-w']), maxHeight=int(options['-h']), 
+		width=int(options['-w']), maxHeight=int(options['-h']), 
 			maxPixels=int(options['-p']))
 
 	litho.print(options['-o'])
