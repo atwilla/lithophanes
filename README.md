@@ -23,20 +23,20 @@ methods:
 		An image object of the given image made with Pillow. This image is 
 		converted to black and white.
 	
-	1. self.pixels
+	2. self.pixels
 	
 		A list containing the pixel values for every pixel in the image
 	
-	1. self.cols and self.rows
+	3. self.cols and self.rows
 	
 		The number of pixels along the width and height respectively.
 	
-	1. self.addBlock(self, topLeftBase, height)
+	4. self.addBlock(self, topLeftBase, height)
 	
 		Adds a block of a given height with the top left corner of the base 
 		at the given point.
 	
-	1. self.buildLithopane(self, width, maxHeight, maxPixels)
+	5. self.buildLithopane(self, width, maxHeight, maxPixels)
 	
 		Resizes image if base pixel count is above maxPixels, calculates the 
 		width of each pixel in mm, calculates the height of each pixel based 
