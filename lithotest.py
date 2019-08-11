@@ -16,7 +16,7 @@ else:
 			options[flag] = args[args.index(flag) + 1]
 
 
-	litho = STL.Lithopane(str(options['-o']), args[1], 
+	litho = STL.Lithophane(str(options['-o']), args[1], 
 		width=int(options['-w']), maxHeight=int(options['-h']), 
 			maxPixels=int(options['-p']))
 

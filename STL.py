@@ -56,11 +56,11 @@ class Shape:
 			print("end written")
 
 
-class Lithopane(Shape):
+class Lithophane(Shape):
 
 	def __init__(self, name, image, width=100, maxHeight=2, maxPixels=50000):
 		"""
-		Create Lithopane object. All units are millimeters unless specified
+		Create Lithophane object. All units are millimeters unless specified
 		otherwise.
 		"""
 
@@ -69,7 +69,7 @@ class Lithopane(Shape):
 		self.pixels = list(self.image.getdata())
 		self.cols = self.image.size[0]
 		self.rows = self.image.size[1]
-		self.buildLithopane(width, maxHeight, maxPixels)
+		self.buildLithophane(width, maxHeight, maxPixels)
 		# self.maxHeight = maxHeight
 
 		# if len(self.pixels) > maxPixels:
@@ -149,9 +149,9 @@ class Lithopane(Shape):
 		self.addFacet(Facet([points[0], points[4], points[2]]))
 		self.addFacet(Facet([points[4], points[6], points[2]]))
 	
-	def buildLithopane(self, width, maxHeight, maxPixels=50000):
+	def buildLithophane(self, width, maxHeight, maxPixels=50000):
 		"""
-		Create an STL lithopane of the given picture based on given
+		Create an STL lithophane of the given picture based on given
 		paramters. Allow for post-initialization modification.
 		"""
 	
@@ -182,7 +182,3 @@ class Lithopane(Shape):
 
 				self.addBlock(topLeftBase, height)
 
-	def getData(self):
-		print("Lithopane Dimensions: ")
-		return (self.width, self.height)
-		
