@@ -96,7 +96,7 @@ class Lithophane(Shape):
 	
 	def addSurface(self, points, normal=[0, 0, 0]):
 		"""
-		Add a face to the lithopane based on four points. Points must be given
+		Add a face to the lithophane based on four points. Points must be given
 		in counter-clockwise order w/ respect to the normal vector.
 		"""
 

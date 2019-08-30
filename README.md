@@ -1,5 +1,5 @@
-# Lithopanes
-This program converts a given picture into an STL lithopane.
+# Lithophanes
+This program converts a given picture into an STL lithophane.
 ## The Facet Class
 This class represents an STL facet. The three points of the facet must be 
 declared according to the right hand rule with respect to the given normal 
@@ -14,7 +14,7 @@ time.
 This class is used to represent an STL solid. self.facets_ is a list that holds 
 all facets used to build said solid, and self.addFacet() adds a given facet to 
 this list. The print function writes the solid to an STL file.
-## The Lithopane Class
+## The Lithophane Class
 This class inherits from the Shape class and adds several new attributes and 
 methods:
 
@@ -36,7 +36,7 @@ methods:
 		Adds a block of a given height with the top left corner of the base 
 		at the given point.
 	
-	5. self.buildLithopane(self, width, maxHeight, maxPixels)
+	5. self.buildLithophane(self, width, maxHeight, maxPixels)
 	
 		Resizes image if base pixel count is above maxPixels, calculates the 
 		width of each pixel in mm, calculates the height of each pixel based 
